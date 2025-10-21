@@ -1,0 +1,5 @@
+{
+  "name": "Data Governance Assistant",
+  "description": "An AI assistant to help with data governance tasks like query compliance checking and data classification.",
+  "requestFramePermissions": []
+}

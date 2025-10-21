@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gemini Data Governance Assistant</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/genai": "https://esm.sh/@google/genai@^0.14.0",
+        "papaparse": "https://esm.sh/papaparse@5.4.1"
+      }
+    }
+  </script>
+  <script type="module" src="index.tsx"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Gemini Data Governance Assistant</h1>
+      <p>Your AI-powered partner for ensuring data safety and compliance.</p>
+    </header>
+    <main>
+      <div class="tabs">
+        <button id="tab-compliance" class="tab-button active" aria-selected="true">Query Compliance Checker</button>
+        <button id="tab-classifier" class="tab-button" aria-selected="false">Data Classifier</button>
+      </div>
+      <div id="content-compliance" class="tab-content active">
+        <section class="input-section">
+          <div class="input-group">
+            <label for="schema-input-compliance">Data Schema (JSON)</label>
+            <textarea id="schema-input-compliance" rows="10" placeholder='{
+  "users": {
+    "columns": [
+      {"name": "user_id", "dataType": "INT", "is_pii": false},
+      {"name": "first_name", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "last_name", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "email", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "signup_date", "dataType": "DATE", "is_pii": false},
+      {"name": "last_login", "dataType": "TIMESTAMP", "is_pii": false}
+    ]
+  }
+}'>{
+  "customers": {
+    "columns": [
+      {"name": "customer_id", "dataType": "UUID", "is_pii": false},
+      {"name": "full_name", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "email", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "phone_number", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "address", "dataType": "VARCHAR", "is_pii": true},
+      {"name": "date_of_birth", "dataType": "DATE", "is_pii": true},
+      {"name": "account_status", "dataType": "VARCHAR", "is_pii": false},
+      {"name": "created_at", "dataType": "TIMESTAMP", "is_pii": false}
+    ]
+  }
+}</textarea>
+          </div>
+          <div class="input-group">
+            <label for="query-input">User Query (e.g., SQL or Natural Language)</label>
+            <textarea id="query-input" rows="5" placeholder="SELECT first_name, email FROM users;">SELECT full_name, email, address FROM customers WHERE account_status = 'active';</textarea>
+          </div>
+          <button id="check-compliance-btn">Check Compliance</button>
+        </section>
+        <section id="result-section-compliance" class="result-section" aria-live="polite">
+          <h2>Analysis Result</h2>
+          <div id="compliance-result" class="result-content">
+             <div class="placeholder">Results will appear here...</div>
+          </div>
+        </section>
+      </div>
+      <div id="content-classifier" class="tab-content">
+        <div class="instructions">
+          <p><strong>How to use:</strong> Paste your data schema and a sample, or simply upload a CSV file. The tool will automatically extract headers for the schema and the first few rows for the data sample.</p>
+        </div>
+        <section class="input-section">
+          <div class="input-group">
+            <label for="file-upload">Upload Data File (CSV)</label>
+            <input type="file" id="file-upload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          </div>
+          <div class="input-group">
+            <label for="schema-input-classifier">Data Schema (JSON or CSV Headers)</label>
+            <textarea id="schema-input-classifier" rows="10" placeholder='customer_id,full_name,email,total_spent,last_seen'>{
+  "name": "transactions",
+  "fields": [
+    {"name": "transaction_id", "type": "string"},
+    {"name": "customer_email", "type": "string"},
+    {"name": "product_id", "type": "string"},
+    {"name": "amount", "type": "number"},
+    {"name": "transaction_date", "type": "date"},
+    {"name": "ip_address", "type": "string"}
+  ]
+}</textarea>
+          </div>
+          <div class="input-group">
+            <label for="sample-input">Data Sample (JSON or CSV)</label>
+            <textarea id="sample-input" rows="5" placeholder='txn_123,test@example.com,prod_abc,99.99,2024-05-21,192.168.1.1
+txn_124,jane.d@email.com,prod_def,49.50,2024-05-22,198.51.100.2'>{
+  "transaction_id": "txn_xyz789",
+  "customer_email": "john.smith@emailprovider.com",
+  "product_id": "prod_hij",
+  "amount": 149.99,
+  "transaction_date": "2024-05-23",
+  "ip_address": "203.0.113.10"
+}</textarea>
+          </div>
+          <button id="classify-data-btn">Classify Data</button>
+        </section>
+        <section id="result-section-classifier" class="result-section" aria-live="polite">
+          <h2>Classification Result</h2>
+          <div id="classifier-result" class="result-content">
+            <div class="placeholder">Results will appear here...</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
